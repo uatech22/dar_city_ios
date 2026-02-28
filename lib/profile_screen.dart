@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:dar_city_app/models/profile.dart';
 import 'package:dar_city_app/services/profile_service.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'loginScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -222,43 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   ),
                 )
               else if (_error != null)
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        color: Colors.redAccent,
-                        size: 64,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _error!,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: _fetchProfile,
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('Try Again'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 16,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                _buildErrorContent()
               else
                 SlideTransition(
                   position: _slideAnimation,
@@ -269,6 +235,77 @@ class _ProfileScreenState extends State<ProfileScreen>
                 ),
             ]),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorContent() {
+    final isAuthError = _error != null &&
+        (_error!.toLowerCase().contains('user not authenticated') ||
+            _error!.contains('401'));
+
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            isAuthError ? Icons.lock_outline : Icons.error_outline,
+            color: Colors.redAccent,
+            size: 64,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            isAuthError
+                ? 'You are not logged in. Please log in to see your profile.'
+                : _error!,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          if (isAuthError)
+    ElevatedButton.icon(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      },
+      icon: const Icon(Icons.login),
+      label: const Text('Go to Login'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.redAccent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
+      ),
+    )
+          else
+            ElevatedButton.icon(
+              onPressed: _fetchProfile,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Try Again'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -568,24 +605,28 @@ class _ProfileScreenState extends State<ProfileScreen>
             ),
             child: _isSaving
                 ? const SizedBox(
-              height: 24,
-              width: 24,
+              height: 20,
+              width: 20,
               child: CircularProgressIndicator(
-                strokeWidth: 2.5,
                 color: Colors.white,
+                strokeWidth: 2.5,
               ),
             )
-                : Row(
+                : const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.check_circle_outline, size: 22),
-                const SizedBox(width: 10),
+                Icon(
+                  Icons.save_alt_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                SizedBox(width: 10),
                 Text(
-                  'Save Changes',
+                  'Save',
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.5,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],

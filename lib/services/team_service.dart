@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:http/http.dart' as http;
 import '../models/person.dart';
 import 'package:dar_city_app/models/team.dart';
 
 class TeamService {
-  static const baseUrl = 'https://darcitybasketball.com/api';
+  static const baseUrl = ApiConfig.baseUrl;
 
 
   static Future<List<Person>> fetchPlayers() async {
@@ -35,7 +36,7 @@ class TeamService {
 //refresh player every seconds
   static Future<Person> fetchSinglePerson(int id) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/players/$id'),
+      Uri.parse('$baseUrl/players/$id'),
     );
 
     if (response.statusCode == 200) {

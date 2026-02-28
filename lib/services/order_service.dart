@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/models/order.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:http/http.dart' as http;
 
 class OrderService {
-  static const String baseUrl = 'https://darcitybasketball.com/api';
-  
+  static const String baseUrl = ApiConfig.baseUrl;
+
   
 //service for create ticket order 
   Future<Order> createOrder({

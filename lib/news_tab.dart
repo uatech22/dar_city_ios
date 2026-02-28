@@ -48,7 +48,7 @@ class _NewsTabState extends State<NewsTab> {
       }
     }
   }
-  
+
   String _getTimeAgo(DateTime? date) {
     if (date == null) return '';
     final now = DateTime.now();
@@ -59,7 +59,7 @@ class _NewsTabState extends State<NewsTab> {
     if (difference.inMinutes > 0) return '${difference.inMinutes}m ago';
     return 'Just now';
   }
-  
+
   void _showPostOptions(News news) {
     // Placeholder for future implementation
   }

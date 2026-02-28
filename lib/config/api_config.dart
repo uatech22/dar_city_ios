@@ -1,3 +1,3 @@
 class ApiConfig {
-  static const String baseUrl = "https://darcitybasketball.com/api/";
+  static const String baseUrl = 'http://darcitybasketball.com/api';
 }

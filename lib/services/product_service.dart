@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:http/http.dart' as http;
 import '../models/product.dart';
 import '../models/category.dart';
 
 class ProductService {
-  static const String baseUrl = 'https://darcitybasketball.com/api';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   /// Fetch all products
   static Future<List<Product>> fetchProducts({

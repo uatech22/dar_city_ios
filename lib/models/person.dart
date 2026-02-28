@@ -62,7 +62,7 @@ class Person {
 
       dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
       image: imagePath != null
-          ? 'http://192.168.1.2:8000/$imagePath'
+          ? 'http://darcitybasketball.com/storage/$imagePath'
           : null,
 
     );

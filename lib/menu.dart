@@ -1,18 +1,14 @@
 import 'package:dar_city_app/about_screen.dart';
 import 'package:dar_city_app/help_support_screen.dart';
-import 'package:dar_city_app/news_list.dart';
+import 'package:dar_city_app/screens/donation_campaigns_screen.dart';
 import 'package:dar_city_app/services/cart_manager.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:dar_city_app/team_page.dart';
-import 'package:dar_city_app/welcome.dart';
+import 'package:dar_city_app/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
-import 'donate_screen.dart';
 import 'settings.dart';
-import 'seat_selection.dart';
-import 'wishlist.dart';
 import 'cart_screen.dart';
-import 'match_tickets.dart';
 
 class MoreMenuScreen extends StatelessWidget {
   MoreMenuScreen({Key? key}) : super(key: key);
@@ -21,8 +17,7 @@ class MoreMenuScreen extends StatelessWidget {
     MenuItem(icon: Icons.group, title: 'Team'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
     MenuItem(icon: Icons.person, title: 'Fan Profile'),
-    // MenuItem(icon: Icons.money, title: 'Donate'),
-    // MenuItem(icon: Icons.favorite, title: 'Wishlist'),
+    MenuItem(icon: Icons.volunteer_activism, title: 'Donation Campaigns'),
     MenuItem(icon: Icons.shopping_cart, title: 'My Carts'),
     MenuItem(icon: Icons.help, title: 'Help & Support'),
     MenuItem(icon: Icons.info, title: 'About App'),
@@ -52,7 +47,7 @@ class MoreMenuScreen extends StatelessWidget {
       leading: Icon(item.icon, color: Colors.white),
       title: Text(item.title, style: const TextStyle(color: Colors.white)),
       trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 16),
-      onTap: () {
+      onTap: () async { // Make the onTap callback async
         if (item.title == 'Team') {
           Navigator.push(
             context,
@@ -83,12 +78,12 @@ class MoreMenuScreen extends StatelessWidget {
             MaterialPageRoute(builder: (_) => const HelpSupportScreen()),
           );
         }
-        // if (item.title == 'Wishlist') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (_) => WishlistScreen()),
-        //   );
-        // }
+        if (item.title == 'Donation Campaigns') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const DonationCampaignsScreen()),
+          );
+        }
         if (item.title == 'My Carts') {
           Navigator.push(
             context,
@@ -96,14 +91,18 @@ class MoreMenuScreen extends StatelessWidget {
           );
         }
         if (item.title == 'Logout') {
-          // Clear user session and cart
-          SessionManager().clearToken();
+          // Await the async token removal.
+          await SessionManager().clearToken();
+          // clearCart is synchronous, so no await is needed.
           CartManager().clearCart();
 
-          // Navigate to Welcome Screen and remove all previous routes
+          // Check if the widget is still in the tree after async operations.
+          if (!context.mounted) return;
+
+          // Navigate to Login Screen and remove all previous routes.
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
             (Route<dynamic> route) => false,
           );
         }

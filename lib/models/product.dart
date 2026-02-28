@@ -23,6 +23,13 @@ class Product {
     required this.variants,
   });
 
+  static int parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
+
   static double parseDouble(dynamic value) {
     if (value == null) return 0.0;
     if (value is num) return value.toDouble();
@@ -38,7 +45,7 @@ class Product {
         : [];
 
     return Product(
-      id: json['id'] as int? ?? 0,
+      id: parseInt(json['id']),
       sku: json['sku'] as String? ?? '',
       name: json['name'] as String? ?? 'Unknown Product',
       description: json['description'] as String?,
@@ -55,7 +62,6 @@ class Product {
       'id': id,
       'sku': sku,
       'name': name,
-      'description': description,
       'description': description,
       'category': category,
       'delivery_cost': deliveryCost,

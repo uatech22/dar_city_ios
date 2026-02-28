@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 class GoogleAuthService {
-  static const String baseUrl = 'https://darcitybasketball.com/api/auth';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email'],

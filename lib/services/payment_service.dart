@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/models/payment.dart';
 import 'package:http/http.dart' as http;
 import 'session_manager.dart';
 
 class PaymentService {
-  static const String _baseUrl = 'https://darcitybasketball.com/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   Future<PaymentResponse> makePayment({
     required int orderId,

@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/news_model.dart';
 
 class NewsService {
-  static const String _baseUrl = 'https://darcitybasketball.com/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   static Future<List<News>> fetchNews() async {
     final response = await http.get(Uri.parse('$_baseUrl/news'));

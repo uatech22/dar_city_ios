@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/models/profile.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileService {
-  static const String _baseUrl = 'https://darcitybasketball.com/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   Future<Profile> getProfile() async {
     final token = await SessionManager().getToken();

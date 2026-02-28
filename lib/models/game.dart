@@ -26,51 +26,40 @@ class Game {
     String date = 'TBD';
     String time = 'TBD';
 
-    if (json['scheduled_at'] is String) {
-      // The API returns a non-standard date format, so we replace the space with a 'T'
-      final parsableDate = (json['scheduled_at'] as String).replaceFirst(' ', 'T');
+    if (json['scheduled_at'] != null) {
+      final rawDate = json['scheduled_at'].toString();
+      final parsableDate = rawDate.replaceFirst(' ', 'T');
       scheduledDateTime = DateTime.tryParse(parsableDate);
-      
+
       if (scheduledDateTime != null) {
         final localTime = scheduledDateTime.toLocal();
-        date = '${localTime.year}-${localTime.month.toString().padLeft(2, '0')}-${localTime.day.toString().padLeft(2, '0')}';
-        time = '${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}';
+        date =
+        '${localTime.year}-${localTime.month.toString().padLeft(2, '0')}-${localTime.day.toString().padLeft(2, '0')}';
+        time =
+        '${localTime.hour.toString().padLeft(2, '0')}:${localTime.minute.toString().padLeft(2, '0')}';
       }
     }
 
+    String homeTeamName = 'TBD';
+    if (json['home_team'] is Map) {
+      homeTeamName = json['home_team']['name'] as String? ?? 'TBD';
+    } else if (json['home_team'] is String) {
+      homeTeamName = json['home_team'];
+    }
 
-    const String baseUrl = "http://192.168.1.2:8000/";
+    String awayTeamName = 'TBD';
+    if (json['away_team'] is Map) {
+      awayTeamName = json['away_team']['name'] as String? ?? 'TBD';
+    } else if (json['away_team'] is String) {
+      awayTeamName = json['away_team'];
+    }
 
-
-    // Handle both nested map and direct string for team names
-    final homeTeamName = (json['home_team'] is Map) 
-        ? json['home_team']['name'] as String? ?? 'TBD' 
-        : json['home_team'] as String? ?? 'TBD';
-
-    final awayTeamName = (json['away_team'] is Map) 
-        ? json['away_team']['name'] as String? ?? 'TBD' 
-        : json['away_team'] as String? ?? 'TBD';
-
-    // Handle both nested map and top-level string for logos
-    String homeLogoPath = (json['home_team'] is Map) 
-        ? json['home_team']['logo'] as String? ?? '' 
-        : json['home_team_logo'] as String? ?? '';
-    
-    String awayLogoPath = (json['away_team'] is Map) 
-        ? json['away_team']['logo'] as String? ?? '' 
-        : json['away_team_logo'] as String? ?? '';
-
-    // The backend might return a full URL or a relative path.
-    // This ensures we have a valid, absolute URL.
-    final homeTeamLogo = (homeLogoPath.startsWith('http'))
-        ? homeLogoPath
-        : (homeLogoPath.isNotEmpty ? '$baseUrl$homeLogoPath' : '');
-
-    final awayTeamLogo = (awayLogoPath.startsWith('http'))
-        ? awayLogoPath
-        : (awayLogoPath.isNotEmpty ? '$baseUrl$awayLogoPath' : '');
-
-    final venue = (json['venue'] is Map) ? json['venue']['name'] as String? ?? 'TBD' : 'TBD';
+    String venue = 'TBD';
+    if (json['venue'] is Map) {
+      venue = json['venue']['name'] as String? ?? 'TBD';
+    } else if (json['venue'] is String) {
+      venue = json['venue'];
+    }
 
     return Game(
       id: json['id'] as int? ?? 0,
@@ -80,8 +69,8 @@ class Game {
       venue: venue,
       homeTeam: homeTeamName,
       awayTeam: awayTeamName,
-      homeTeamLogo: homeTeamLogo,
-      awayTeamLogo: awayTeamLogo,
+      homeTeamLogo: json['home_team_logo'],
+      awayTeamLogo: json['away_team_logo'],
     );
   }
 }

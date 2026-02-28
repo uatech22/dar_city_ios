@@ -36,8 +36,8 @@ class News {
       category: json['category'] ?? '',
       author: json['author'] != null ? Author.fromJson(json['author']) : null,
       isLiked: json['is_liked'] ?? false,
-      likesCount: json['likes_count'] ?? 0,
-      commentsCount: json['comments_count'] ?? 0,
+      likesCount: int.tryParse(json['likes_count']?.toString() ?? '') ?? 0,
+      commentsCount: int.tryParse(json['comments_count']?.toString() ?? '') ?? 0,
     );
   }
 
@@ -65,7 +65,7 @@ class Author {
 
   factory Author.fromJson(Map<String, dynamic> json) {
     return Author(
-      id: json['id'],
+      id: int.tryParse(json['id']?.toString() ?? '') ?? 0,
       name: json['name'] ?? '',
     );
   }

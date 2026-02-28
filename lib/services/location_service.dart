@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/models/country.dart';
 import 'package:http/http.dart' as http;
 
 class LocationService {
-  static const String _baseUrl = 'https://darcitybasketball.com/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   Future<List<Country>> getCountries() async {
     // Corrected the endpoint to match the likely API structure

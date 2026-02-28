@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/models/comment.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:http/http.dart' as http;
 
 class CommentService {
-  static const String _baseUrl = 'http://192.168.1.3:8000/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   Future<List<Comment>> getComments(String newsId) async {
     final token = await SessionManager().getToken();
@@ -83,7 +84,7 @@ class CommentService {
       throw Exception('Failed to delete comment. Status: ${response.statusCode}, Body: ${response.body}');
     }
   }
-  
+
   Future<Map<String, dynamic>> toggleNewsLike(String newsId) async {
     final token = await SessionManager().getToken();
     if (token == null) throw Exception('User not authenticated.');

@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:http/http.dart' as http;
 import '../models/game.dart';
 import 'package:dar_city_app/models/game_results.dart';
 import 'package:dar_city_app/models/live_matches.dart';
 
 class MatchService {
-  static const String baseUrl = 'https://darcitybasketball.com/api';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   static Future<List<Game>> fetchUpcomingMatches() async {
     final url = Uri.parse('$baseUrl/upcoming-matches');
@@ -57,7 +58,11 @@ class MatchService {
       if (json['success'] == true && json['data'] != null) {
         return LiveMatch.fromJson(json['data']);
       }
+      // If the server says success:false or data is null, it means no live match now.
+      return null;
+    } else {
+      // Throw an error to make the problem visible in the UI.
+      throw Exception('Failed to load live match. Server responded with ${response.statusCode}: ${response.body}');
     }
-    return null;
   }
 }

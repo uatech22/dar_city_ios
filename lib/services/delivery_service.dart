@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:http/http.dart' as http;
 
 class DeliveryService {
-  static const String _baseUrl = 'https://darcitybasketball.com/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   Future<void> saveDeliveryInfo({
     required int orderId,

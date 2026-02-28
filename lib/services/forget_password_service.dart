@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:http/http.dart' as http;
 
 class ForgotPasswordService {
-  // Corrected the IP address to match other authentication services
-  static const String _baseUrl = 'https://darcitybasketball.com/api';
+  static const String _baseUrl = ApiConfig.baseUrl;
 
   static Future<Map<String, dynamic>> sendResetLink(String email) async {
     try {

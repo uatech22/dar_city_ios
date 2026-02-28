@@ -13,6 +13,13 @@ class ProductVariant {
     required this.stock,
   });
 
+  static int parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
+
   static double parseDouble(dynamic value) {
     if (value == null) return 0.0;
     if (value is num) return value.toDouble();
@@ -23,11 +30,11 @@ class ProductVariant {
   // Safely parse from JSON with default values for missing/null fields.
   factory ProductVariant.fromJson(Map<String, dynamic> json) {
     return ProductVariant(
-      id: json['id'] as int? ?? 0, // Default to 0 if null
+      id: parseInt(json['id']), 
       color: json['color'] as String?,
       size: json['size'] as String?,
-      price: parseDouble(json['price']), // Uses robust parsing
-      stock: json['stock'] as int? ?? 0, // Default to 0 if null
+      price: parseDouble(json['price']), 
+      stock: parseInt(json['stock']), 
     );
   }
 

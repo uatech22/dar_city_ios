@@ -18,14 +18,22 @@ class LiveMatch {
   });
 
   factory LiveMatch.fromJson(Map<String, dynamic> json) {
+    // Safely parse numbers that might be sent as strings.
+    int _parseFlexibleInt(dynamic value) {
+      if (value == null) return 0;
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
     return LiveMatch(
-      homeTeam: json['home_team'],
-      awayTeam: json['away_team'],
-      homeTeamLogo: json['home_team_logo'],
-      awayTeamLogo: json['away_team_logo'],
-      homeScore: json['home_score'],
-      awayScore: json['away_score'],
-      quarter: json['quarter'],
+      homeTeam: json['home_team'] as String? ?? 'TBD',
+      awayTeam: json['away_team'] as String? ?? 'TBD',
+      homeTeamLogo: json['home_team_logo'] as String? ?? '',
+      awayTeamLogo: json['away_team_logo'] as String? ?? '',
+      homeScore: _parseFlexibleInt(json['home_score']),
+      awayScore: _parseFlexibleInt(json['away_score']),
+      quarter: _parseFlexibleInt(json['quarter']), // This will now handle the string "1"
     );
   }
 }

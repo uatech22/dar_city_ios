@@ -40,9 +40,10 @@ class _ProductCheckoutScreenState extends State<ProductCheckoutScreen> {
               child: const Text('Go to Login'),
               onPressed: () {
                 Navigator.of(context).pop(); // Dismiss the dialog
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false, // This removes all previous routes
                 );
               },
             ),
@@ -64,7 +65,16 @@ class _ProductCheckoutScreenState extends State<ProductCheckoutScreen> {
   }
 
   Future<void> _placeOrder({bool withShipping = false}) async {
-    final token = await SessionManager().getToken();
+    String? token;
+    try {
+      token = await SessionManager().getToken();
+    } catch (e) {
+      // If there's any error reading the token, assume the user is not logged in.
+      token = null;
+    }
+
+    if (!mounted) return;
+
     if (token == null) {
       _showLoginDialog();
       return;

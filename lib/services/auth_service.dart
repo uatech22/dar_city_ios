@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String baseUrl = 'https://darcitybasketball.com/api/auth';
+  static const String baseUrl = ApiConfig.baseUrl;
 
   static const Duration timeout = Duration(seconds: 15);
 
@@ -18,7 +19,7 @@ class AuthService {
     try {
       final response = await http
           .post(
-        Uri.parse('$baseUrl/register/step-one'),
+        Uri.parse('$baseUrl/auth/register/step-one'),
         headers: _headers(),
         body: jsonEncode({
           'email': email,
@@ -42,7 +43,7 @@ class AuthService {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/verify-email'),
+        Uri.parse('$baseUrl/auth/verify-email'),
         headers: _headers(),
         body: jsonEncode({
           'token': token,
@@ -64,7 +65,7 @@ class AuthService {
     try {
       final response = await http
           .post(
-        Uri.parse('$baseUrl/resend-verification'),
+        Uri.parse('$baseUrl/auth/resend-verification'),
         headers: _headers(),
         body: jsonEncode({'token': token}),
       )
@@ -88,7 +89,7 @@ class AuthService {
     try {
       final response = await http
           .post(
-        Uri.parse('$baseUrl/register/step-two'),
+        Uri.parse('$baseUrl/auth/register/step-two'),
         headers: _headers(),
         body: jsonEncode({
           'token': token,
@@ -111,7 +112,7 @@ class AuthService {
   static Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/login'),
+        Uri.parse('$baseUrl/auth/login'),
         headers: _headers(),
         body: jsonEncode({'email': email, 'password': password}),
       ).timeout(timeout);

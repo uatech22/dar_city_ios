@@ -247,46 +247,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
 
-                          const SizedBox(height: 16),
-
-                          //  GOOGLE SIGN UP
-                          SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: TextButton(
-                              onPressed: isLoading || isGoogleLoading
-                                  ? null
-                                  : _handleGoogleSignUp,
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              child: isGoogleLoading
-                                  ? const CircularProgressIndicator(
-                                color: Colors.black,
-                              )
-                                  : Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/google.png',
-                                    height: 22,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  const Text(
-                                    'Sign up with Google',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // const SizedBox(height: 16),
+                          //
+                          // //  GOOGLE SIGN UP
+                          // SizedBox(
+                          //   width: double.infinity,
+                          //   height: 52,
+                          //   child: TextButton(
+                          //     onPressed: isLoading || isGoogleLoading
+                          //         ? null
+                          //         : _handleGoogleSignUp,
+                          //     style: TextButton.styleFrom(
+                          //       backgroundColor: Colors.white,
+                          //       shape: RoundedRectangleBorder(
+                          //         borderRadius: BorderRadius.circular(14),
+                          //       ),
+                          //     ),
+                          //     child: isGoogleLoading
+                          //         ? const CircularProgressIndicator(
+                          //       color: Colors.black,
+                          //     )
+                          //         : Row(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       children: [
+                          //         Image.asset(
+                          //           'assets/images/google.png',
+                          //           height: 22,
+                          //         ),
+                          //         const SizedBox(width: 10),
+                          //         const Text(
+                          //           'Sign up with Google',
+                          //           style: TextStyle(
+                          //             color: Colors.black,
+                          //             fontSize: 15,
+                          //             fontWeight: FontWeight.w600,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

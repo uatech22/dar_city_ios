@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:dar_city_app/config/api_config.dart';
 import 'package:http/http.dart' as http;
 import '../models/seat_section.dart';
 import 'package:dar_city_app/models/seat_grid.dart';
 
 class TicketSeat {
-  static const baseUrl = 'https://darcitybasketball.com/api'; //
+  static const baseUrl = ApiConfig.baseUrl;
 
   Future<List<SeatSection>> fetchSections(int matchId) async {
     final url = Uri.parse('$baseUrl/matches/$matchId/sections');
