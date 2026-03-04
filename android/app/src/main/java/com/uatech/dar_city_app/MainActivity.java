@@ -1,4 +1,4 @@
-package com.example.dar_city_app;
+package com.uatech.dar_city_app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

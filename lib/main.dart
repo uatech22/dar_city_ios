@@ -9,8 +9,11 @@ Future<void> main() async {
   // Ensures that Flutter bindings are initialized before any async operations.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Get the token from secure storage.
-  final String? token = await SessionManager().getToken();
+  // 1. Initialize SessionManager by loading the token from secure storage.
+  await SessionManager().loadToken();
+
+  // 2. Now getToken() will return the actual token if it exists.
+  final String? token = SessionManager().getToken();
 
   // Load the cart from shared preferences.
   await CartManager().loadCart();

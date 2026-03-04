@@ -1,3 +1,4 @@
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -12,7 +13,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.dar_city_app"
+    namespace = "com.uatech.dar_city_app"
     compileSdk 36
     ndkVersion = flutter.ndkVersion
 
@@ -29,8 +30,8 @@ android {
         applicationId "com.uatech.dar_city_app"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 6
+        versionName "1.0.6"
     }
 
     // ✅ Add signing configuration
