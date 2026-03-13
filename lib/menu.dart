@@ -1,6 +1,5 @@
 import 'package:dar_city_app/about_screen.dart';
 import 'package:dar_city_app/help_support_screen.dart';
-import 'package:dar_city_app/screens/donation_campaigns_screen.dart';
 import 'package:dar_city_app/services/cart_manager.dart';
 import 'package:dar_city_app/services/session_manager.dart';
 import 'package:dar_city_app/team_page.dart';
@@ -17,7 +16,7 @@ class MoreMenuScreen extends StatelessWidget {
     MenuItem(icon: Icons.group, title: 'Team'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
     MenuItem(icon: Icons.person, title: 'Fan Profile'),
-    MenuItem(icon: Icons.volunteer_activism, title: 'Donation Campaigns'),
+    // MenuItem(icon: Icons.volunteer_activism, title: 'Donation Campaigns'), // Removed for App Store compliance
     MenuItem(icon: Icons.shopping_cart, title: 'My Carts'),
     MenuItem(icon: Icons.help, title: 'Help & Support'),
     MenuItem(icon: Icons.info, title: 'About App'),
@@ -78,12 +77,13 @@ class MoreMenuScreen extends StatelessWidget {
             MaterialPageRoute(builder: (_) => const HelpSupportScreen()),
           );
         }
-        if (item.title == 'Donation Campaigns') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const DonationCampaignsScreen()),
-          );
-        }
+        // Removed for App Store compliance
+        // if (item.title == 'Donation Campaigns') {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (_) => const DonationCampaignsScreen()),
+        //   );
+        // }
         if (item.title == 'My Carts') {
           Navigator.push(
             context,
