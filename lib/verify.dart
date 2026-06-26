@@ -1,0 +1,279 @@
+import 'package:dar_city_app/core/layout/dar_layout_metrics.dart';
+import 'package:dar_city_app/core/widgets/responsive_scaffold.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'complete_profile.dart';
+import 'services/auth_service.dart';
+
+/* ================= VERIFY EMAIL SCREEN ================= */
+
+class VerifyEmailScreen extends StatefulWidget {
+  final String token; // registration token from step one
+
+  const VerifyEmailScreen({super.key, required this.token});
+
+  @override
+  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
+}
+
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  final List<TextEditingController> _controllers =
+  List.generate(6, (_) => TextEditingController());
+  
+  final List<FocusNode> _focusNodes =
+  List.generate(6, (_) => FocusNode());
+
+  bool isVerifying = false;
+  bool isResending = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Use a small delay to ensure the keyboard pops up on iOS/iPadOS
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        FocusScope.of(context).requestFocus(_focusNodes[0]);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    for (final controller in _controllers) {
+      controller.dispose();
+    }
+    for (final node in _focusNodes) {
+      node.dispose();
+    }
+    super.dispose();
+  }
+
+  /* ================= VERIFY CODE ================= */
+  Future<void> _verifyCode() async {
+    final code = _controllers.map((c) => c.text).join();
+
+    if (code.length != 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter the 6-digit code')),
+      );
+      return;
+    }
+
+    setState(() => isVerifying = true);
+
+    final result = await AuthService.verifyEmail(
+      token: widget.token,
+      code: code,
+    );
+
+    setState(() => isVerifying = false);
+
+    if (result['success'] == true) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => CompleteProfileScreen(
+            token: widget.token,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'] ?? 'Verification failed')),
+      );
+    }
+  }
+
+  /* ================= RESEND CODE ================= */
+  Future<void> _resendCode() async {
+    setState(() => isResending = true);
+
+    final result = await AuthService.resendVerificationCode(widget.token);
+
+    setState(() => isResending = false);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(result['message'] ?? 'Failed to resend code')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final layout = DarLayoutMetrics.of(context);
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Verify Email'),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      // This is key for tablet/iPad keyboard handling
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: layout.horizontalPadding),
+                  child: ResponsiveAuthShell(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                          const SizedBox(height: 20),
+                          const Icon(Icons.mark_email_read_outlined, size: 80, color: Colors.red),
+                          const SizedBox(height: 30),
+                          const Text(
+                            'Check your email',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            "We've sent a 6-digit verification code to your email. Please enter it below to continue.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+                          ),
+                          const SizedBox(height: 40),
+
+                          /// CODE INPUT
+                          CodeInputRow(
+                            controllers: _controllers,
+                            focusNodes: _focusNodes,
+                          ),
+
+                          const SizedBox(height: 40),
+                          const Text(
+                            "Didn't receive the code?",
+                            style: TextStyle(color: Colors.white70, fontSize: 15),
+                          ),
+                          TextButton(
+                            onPressed: isResending ? null : _resendCode,
+                            child: isResending
+                                ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.red),
+                            )
+                                : const Text(
+                              'Resend Code',
+                              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+
+                          /// VERIFY BUTTON
+                          SizedBox(
+                            width: double.infinity,
+                            height: 55,
+                            child: ElevatedButton(
+                              onPressed: isVerifying ? null : _verifyCode,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: isVerifying
+                                  ? const CircularProgressIndicator(color: Colors.white)
+                                  : const Text(
+                                'Verify',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40), // Ensures space at bottom when keyboard rises
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/* ================= CODE INPUT ROW ================= */
+
+class CodeInputRow extends StatelessWidget {
+  final List<TextEditingController> controllers;
+  final List<FocusNode> focusNodes;
+
+  const CodeInputRow({
+    super.key,
+    required this.controllers,
+    required this.focusNodes,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(controllers.length, (index) {
+        return SizedBox(
+          width: 45,
+          height: 60,
+          child: TextField(
+            controller: controllers[index],
+            focusNode: focusNodes[index],
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            maxLength: 1,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+            enableSuggestions: false,
+            autocorrect: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(1),
+            ],
+            decoration: InputDecoration(
+              counterText: '',
+              filled: true,
+              fillColor: const Color(0xFF1A1A1A),
+              contentPadding: EdgeInsets.zero,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.white10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.red, width: 2),
+              ),
+            ),
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                if (index < controllers.length - 1) {
+                  focusNodes[index + 1].requestFocus();
+                } else {
+                  focusNodes[index].unfocus();
+                }
+              } else if (value.isEmpty && index > 0) {
+                focusNodes[index - 1].requestFocus();
+              }
+            },
+          ),
+        );
+      }),
+    );
+  }
+}

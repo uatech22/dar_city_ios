@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "994288474065",
+    "project_id": "dar-city-basketball",
+    "storage_bucket": "dar-city-basketball.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994288474065:android:469dbe5ca0f6cbd4fd32f0",
+        "android_client_info": {
+          "package_name": "com.uatech.dar_city_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW5rokNFBYPIEtsqnLd0FzG8fHW9_K8eM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
