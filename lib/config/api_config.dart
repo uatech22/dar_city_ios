@@ -1,6 +1,6 @@
 class ApiConfig {
   /// Single source of truth for all API calls (fan app + V2 coach/player features).
-  static const String baseUrl = 'http://192.168.1.6:8000/api';
+  static const String baseUrl = 'https://darcitybasketball.com/api';
 
   /// Live / in-session screens — chat, live scores, seat holds, roll call.
   static const Duration refreshIntervalFast = Duration(seconds: 50); //5
