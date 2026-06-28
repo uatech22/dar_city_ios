@@ -9,12 +9,43 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await PushNotificationService.instance.init(navigatorKey: rootNavigatorKey);
-  await SessionManager().loadSession();
-  await CartManager().loadCart();
-  await PushNotificationService.instance.syncDeviceTokenIfLoggedIn();
-
   runApp(const DarCityBasketballApp());
+
+  _initializeAppServices();
+}
+
+Future<void> _initializeAppServices() async {
+  try {
+    await PushNotificationService.instance
+        .init(navigatorKey: rootNavigatorKey)
+        .timeout(const Duration(seconds: 10));
+  } catch (e) {
+    debugPrint('Push init failed: $e');
+  }
+
+  try {
+    await SessionManager()
+        .loadSession()
+        .timeout(const Duration(seconds: 10));
+  } catch (e) {
+    debugPrint('Session load failed: $e');
+  }
+
+  try {
+    await CartManager()
+        .loadCart()
+        .timeout(const Duration(seconds: 10));
+  } catch (e) {
+    debugPrint('Cart load failed: $e');
+  }
+
+  try {
+    await PushNotificationService.instance
+        .syncDeviceTokenIfLoggedIn()
+        .timeout(const Duration(seconds: 10));
+  } catch (e) {
+    debugPrint('Token sync failed: $e');
+  }
 }
 
 class DarCityBasketballApp extends StatelessWidget {
